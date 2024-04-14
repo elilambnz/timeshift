@@ -6,8 +6,8 @@ export const fetchPeople = async () => {
       `id,
         name,
         timezone,
-        start_shift,
-        end_shift`,
+        startShift: start_shift,
+        endShift: end_shift`,
     );
     if (error) throw error;
 
@@ -22,8 +22,8 @@ export const fetchPeople = async () => {
 export const addPerson = async (person: {
   name: string;
   timezone: string;
-  start_shift: string;
-  end_shift: string;
+  startShift: string;
+  endShift: string;
 }) => {
   try {
     const session = await supabase.auth.getSession();
@@ -34,8 +34,8 @@ export const addPerson = async (person: {
     const { data, error } = await supabase.from("people").insert({
       name: person.name,
       timezone: person.timezone,
-      start_shift: person.start_shift,
-      end_shift: person.end_shift,
+      start_shift: person.startShift,
+      end_shift: person.endShift,
       user_id: userId,
     });
     if (error) throw error;

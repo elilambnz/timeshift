@@ -3,11 +3,14 @@ import { Navigate, useLocation } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
 
+import { formatUTCOffset, getUTCOffsetForTimezone } from "../utils/helpers";
+
+import { fetchProfile } from "../api/profile";
 import { fetchPeople } from "../api/people";
 
+import PersonRow from "../components/PersonRow";
 import DialogEmpty from "../components/DialogEmpty";
 import AddPerson from "../components/AddPerson";
-import { formatUTCOffset, getUTCOffsetForTimezone } from "../utils/helpers";
 
 export default function Dashboard({ session }: { session: Session | null }) {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -23,6 +26,11 @@ export default function Dashboard({ session }: { session: Session | null }) {
     return () => clearInterval(interval);
   }, []);
 
+  const { data: profile, isLoading: isLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: fetchProfile,
+  });
+
   const { data: people, isLoading: isPeopleLoading } = useQuery({
     queryKey: ["people"],
     queryFn: fetchPeople,
@@ -32,7 +40,7 @@ export default function Dashboard({ session }: { session: Session | null }) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  if (isPeopleLoading) {
+  if (isLoading || isPeopleLoading) {
     return <p>Loading...</p>;
   }
 
@@ -55,40 +63,31 @@ export default function Dashboard({ session }: { session: Session | null }) {
           </p>
         </div>
 
-        <ul className="relative mt-4">
+        <div className="relative mt-4">
           <div className="absolute left-1/2 top-0 h-full w-0.5 bg-red-500" />
-          <li className="mb-4 rounded bg-white p-4 shadow-md">
-            <h2>You</h2>
-            <p>{userTimezone}</p>
-            <p>{getUTCOffsetForTimezone(userTimezone)}</p>
-            {formatUTCOffset(getUTCOffsetForTimezone(userTimezone))}
-          </li>
-          {people?.map((person) => (
-            <li
-              key={person.id}
-              className="relative mb-4 grid grid-cols-12 rounded bg-white p-4 py-12 shadow-md"
-            >
-              <div className="absolute">
-                <h2>{person.name}</h2>
-                <p>
-                  {person.start_shift} - {person.end_shift}
-                </p>
-                <p>{person.timezone}</p>
-                <p>{getUTCOffsetForTimezone(person.timezone)}</p>
-                <p>
-                  {formatUTCOffset(getUTCOffsetForTimezone(person.timezone))}
-                </p>
-              </div>
-              {Array.from({ length: 12 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="h-4 border-l border-gray-200"
-                  style={{ width: "calc(100% / 12)" }}
-                />
-              ))}
+          <ul>
+            <li className="mb-4 rounded border border-gray-500 bg-white p-4">
+              <h2>You</h2>
+              <p>Start Shift: {profile?.startShift}</p>
+              <p>End Shift: {profile?.endShift}</p>
+              <p>
+                {userTimezone} (
+                {formatUTCOffset(getUTCOffsetForTimezone(userTimezone))})
+              </p>
             </li>
-          ))}
-        </ul>
+            {people && people.length > 0 ? (
+              people.map((person) => (
+                <PersonRow
+                  key={person.id}
+                  person={person}
+                  currentTime={currentTime}
+                />
+              ))
+            ) : (
+              <p>No people added yet</p>
+            )}
+          </ul>
+        </div>
       </main>
 
       <DialogEmpty show={showAddPerson} onClose={() => setShowAddPerson(false)}>

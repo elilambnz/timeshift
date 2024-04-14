@@ -16,8 +16,8 @@ export default function AppPerson() {
       addPerson({
         name,
         timezone,
-        start_shift: startShift,
-        end_shift: endShift,
+        startShift,
+        endShift,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
