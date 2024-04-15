@@ -10,7 +10,11 @@ export const formatUTCOffset = (offsetInMinutes: number) => {
   const offsetSign = offsetInMinutes >= 0 ? "+" : "-";
 
   // Format the offset string as "GMT ±HH"
-  const formattedOffset = `GMT ${offsetSign}${offsetHours.toString().padStart(2, "0")}`;
+  const formattedOffset = `GMT ${offsetSign}${offsetHours.toString()}`;
 
   return formattedOffset;
+};
+
+export const readableTimezone = (timezone: string) => {
+  return timezone.replace(/_/g, " ");
 };
