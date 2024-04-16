@@ -1,18 +1,16 @@
 import clsx from "clsx";
+import { Person } from "../api/people";
+import { getDeterministicEmoji } from "../utils/helpers";
 
 export default function PersonBadge({
-  name,
-  timezone,
-  startShift,
-  endShift,
+  person,
   currentTime,
 }: {
-  name: string;
-  timezone: string;
-  startShift: string;
-  endShift: string;
+  person: Person;
   currentTime: Date;
 }) {
+  const { name, timezone, startShift, endShift, image } = person;
+
   const currentDateTimezone = new Date(
     currentTime.toLocaleString("en-US", { timeZone: timezone }),
   );
@@ -35,16 +33,27 @@ export default function PersonBadge({
     currentDateTimezone <= endShiftTime;
 
   return (
-    <div className="col-span-3 flex items-center gap-x-4 bg-white p-4 sm:col-span-2 md:col-span-1">
+    <>
       <div
         className={clsx(
-          "flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white",
-          isShiftActive ? "bg-green-500" : "bg-blue-500",
+          "relative h-12 w-12 rounded-full border-4 object-cover object-top",
+          isShiftActive ? "border-green-400" : "border-neutral-800",
         )}
       >
-        {name[0]}
+        {image ? (
+          <>
+            <img src={image} className="h-full w-full rounded-full" />
+            <div className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/4 rotate-12 transform text-2xl">
+              👑
+            </div>
+          </>
+        ) : (
+          <div className="flex h-full w-full rotate-6 transform items-center justify-center rounded-full bg-neutral-600 text-2xl">
+            {getDeterministicEmoji(name)}
+          </div>
+        )}
       </div>
-      <h2 className="truncate">{name}</h2>
-    </div>
+      <h2 className="truncate text-white">{name}</h2>
+    </>
   );
 }

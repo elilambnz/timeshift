@@ -1,5 +1,3 @@
-import clsx from "clsx";
-
 export default function Shift({
   startShift,
   endShift,
@@ -28,10 +26,6 @@ export default function Shift({
     endShiftTime.setDate(endShiftTime.getDate() + 1);
   }
 
-  const isShiftActive =
-    currentDateTimezone >= startShiftTime &&
-    currentDateTimezone <= endShiftTime;
-
   const shiftStartTimeTimestamp = startShiftTime.getTime();
   const shiftEndTimeTimestamp = endShiftTime.getTime();
   const shiftDuration = shiftEndTimeTimestamp - shiftStartTimeTimestamp;
@@ -46,24 +40,12 @@ export default function Shift({
   const shiftProgress = (elapsedDuration / shiftDuration) * 100;
 
   // Center the shift position
-  const shiftPosition = 50 - shiftProgress / 3;
+  const shiftPosition = 50 - shiftProgress / 2.85;
 
   return (
-    <div className="relative -z-10 h-full w-full overflow-hidden rounded-xl bg-blue-300">
-      {/* {[...Array(24)].map((_, index) => (
-        <div
-          key={index}
-          className="absolute top-0 h-full w-0.5 bg-gray-200"
-          style={{
-            left: `${(index / 24) * 100}%`,
-          }}
-        />
-      ))} */}
+    <div className="relative -z-10 h-full w-full overflow-hidden rounded-xl bg-neutral-900">
       <div
-        className={clsx(
-          "absolute top-0 h-full",
-          isShiftActive ? "bg-green-400" : "bg-red-400",
-        )}
+        className="absolute top-0 h-full bg-emerald-300"
         style={{
           width: `${shiftWidth}%`,
           left: `${shiftPosition}%`,
@@ -71,17 +53,14 @@ export default function Shift({
       />
       {shiftPosition < 0 && (
         <div
-          className={clsx(
-            "absolute top-0 h-full",
-            isShiftActive ? "bg-green-400" : "bg-red-400",
-          )}
+          className="absolute top-0 h-full bg-emerald-300"
           style={{
             width: `${shiftWidth}%`,
             left: `${shiftPosition + 100}%`,
           }}
         />
       )}
-      <p className="absolute left-3 flex h-full items-center text-xs text-gray-700">
+      <p className="absolute left-3 flex h-full items-center text-xs text-gray-600">
         {startHours.toString().padStart(2, "0")}:
         {startMinutes.toString().padStart(2, "0")} -{" "}
         {endHours.toString().padStart(2, "0")}:

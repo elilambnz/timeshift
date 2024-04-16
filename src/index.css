@@ -16,3 +16,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-neutral-900 text-white;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  color-scheme: dark;
+}
