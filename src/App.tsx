@@ -5,6 +5,8 @@ import { supabase } from "./lib/supabase";
 import { SupabaseProvider } from "./providers/SupabaseProvider";
 import { Session } from "@supabase/supabase-js";
 
+import Loader from "./components/Loader";
+
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
@@ -24,7 +26,7 @@ function App() {
     });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
 
   return (
     <SupabaseProvider session={session}>

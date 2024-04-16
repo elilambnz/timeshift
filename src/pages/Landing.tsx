@@ -86,7 +86,7 @@ export default function Landing() {
         <ContainerScroll
           titleComponent={
             <>
-              <h1 className="text-4xl font-semibold text-black dark:text-white">
+              <h1 className="text-4xl font-semibold text-white">
                 Stay in sync with <br />
                 <span className="mt-1 text-4xl font-bold leading-none md:text-[6rem]">
                   Timeshift
@@ -105,16 +105,23 @@ export default function Landing() {
           />
         </ContainerScroll>
 
+        <p className="mb-20 px-4 text-center text-3xl text-white sm:mb-32">
+          <span className="font-semibold">Timeshift</span> enables you to view
+          the current shifts of your distributed team in real‑time.
+        </p>
+
         {loginError && (
-          <p className="my-10 text-center text-sm text-red-600">{loginError}</p>
+          <p className="my-10 px-4 text-center text-sm text-red-600">
+            {loginError}
+          </p>
         )}
       </main>
 
-      <footer className="my-10 text-center text-xs text-gray-500">
+      <footer className="my-10 px-4 text-center text-xs text-neutral-500">
         <p>
           Built by{" "}
           <a
-            className="underline transition-colors hover:text-gray-700"
+            className="underline transition-colors hover:text-neutral-700"
             href="https://github.com/elilambnz"
             target="_blank"
           >
@@ -122,7 +129,7 @@ export default function Landing() {
           </a>{" "}
           as a part of the{" "}
           <a
-            className="underline transition-colors hover:text-gray-700"
+            className="underline transition-colors hover:text-neutral-700"
             href="https://supabase.com/blog/supabase-oss-hackathon"
             target="_blank"
           >
@@ -130,8 +137,8 @@ export default function Landing() {
           </a>
           . Licensed under{" "}
           <a
-            className="underline transition-colors hover:text-gray-700"
-            href="https://github.com/elilambnz/timeshift/blob/main/LICENSE.md"
+            className="underline transition-colors hover:text-neutral-700"
+            href="https://github.com/elilambnz/timeshift/blob/main/LICENSE"
             target="_blank"
           >
             MIT License

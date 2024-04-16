@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { fetchProfile, updateProfile } from "../api/profile";
 
+import Loader from "./Loader";
+
 import clsx from "clsx";
 
 export default function PersonForm({ onClose }: { onClose: () => void }) {
@@ -46,7 +48,7 @@ export default function PersonForm({ onClose }: { onClose: () => void }) {
 
   const formReady = startShift && endShift;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="min-w-[18rem]">

@@ -14,6 +14,7 @@ import {
 import { fetchProfile } from "../api/profile";
 import { Person, fetchPeople } from "../api/people";
 
+import Loader from "../components/Loader";
 import PersonBadge from "../components/PersonBadge";
 import Shift from "../components/Shift";
 import DialogEmpty from "../components/DialogEmpty";
@@ -94,9 +95,7 @@ export default function Dashboard({ session }: { session: Session | null }) {
   }
 
   if (isLoading || isPeopleLoading) {
-    <div className="flex h-screen min-h-[40rem] flex-col items-center justify-center bg-neutral-900 text-white">
-      <span className="font-mono text-sm">Loading...</span>
-    </div>;
+    <Loader />;
   }
 
   return (

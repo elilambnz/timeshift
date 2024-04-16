@@ -35,7 +35,7 @@ export default function DialogEmpty({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:my-8 dark:bg-neutral-800">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-neutral-800 shadow-xl transition-all sm:my-8">
                 {children}
               </Dialog.Panel>
             </Transition.Child>
