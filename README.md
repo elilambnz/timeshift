@@ -12,19 +12,21 @@ It is built using [Supabase](https://supabase.io) as the backend and [React.js](
 
 ## Getting Started
 
-Install dependencies
+Create a new Supabase project and run the contents of the [schema.sql](/supabase/schema.sql) file in the SQL editor to create the required tables.
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Copy the `.env.example` file to `.env` and fill in the required environment variables.
+Copy the `.env.example` file to `.env` and fill in the required environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-Start the development server
+Start the development server:
 
 ```bash
 npm start
