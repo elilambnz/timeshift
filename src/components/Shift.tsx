@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export default function Shift({
   startShift,
   endShift,
@@ -9,56 +11,81 @@ export default function Shift({
   timezone: string;
   currentTime: Date;
 }) {
-  const currentTimeInTimezone = new Date(
+  const currentDateTimezone = new Date(
     currentTime.toLocaleString("en-US", { timeZone: timezone }),
   );
+  const startShiftTime = new Date(currentDateTimezone);
+  const endShiftTime = new Date(currentDateTimezone);
 
-  const [startHour, startMinute] = startShift.split(":").map(Number);
-  const [endHour, endMinute] = endShift.split(":").map(Number);
+  const [startHours, startMinutes] = startShift.split(":").map(Number);
+  const [endHours, endMinutes] = endShift.split(":").map(Number);
 
-  const shiftStartTime = new Date(currentTimeInTimezone);
-  shiftStartTime.setHours(startHour, startMinute, 0, 0);
+  startShiftTime.setHours(startHours, startMinutes, 0, 0);
+  endShiftTime.setHours(endHours, endMinutes, 0, 0);
 
-  const shiftEndTime = new Date(currentTimeInTimezone);
-  shiftEndTime.setHours(endHour, endMinute, 0, 0);
-
-  const currentTimeTimestamp = currentTimeInTimezone.getTime();
-  const shiftStartTimeTimestamp = shiftStartTime.getTime();
-  const shiftEndTimeTimestamp = shiftEndTime.getTime();
-  const shiftDuration = shiftEndTimeTimestamp - shiftStartTimeTimestamp;
-  const elapsedTime = currentTimeTimestamp - shiftStartTimeTimestamp;
-  let shiftPosition = (elapsedTime / shiftDuration) * 100;
-  // Handle negative shiftPosition
-  if (shiftPosition < 0) {
-    shiftPosition = 100 + shiftPosition;
+  // Adjust endShiftTime if it's earlier than startShiftTime (crosses midnight)
+  if (endShiftTime < startShiftTime) {
+    endShiftTime.setDate(endShiftTime.getDate() + 1);
   }
-  shiftPosition -= 50;
+
+  const isShiftActive =
+    currentDateTimezone >= startShiftTime &&
+    currentDateTimezone <= endShiftTime;
+
+  const shiftStartTimeTimestamp = startShiftTime.getTime();
+  const shiftEndTimeTimestamp = endShiftTime.getTime();
+  const shiftDuration = shiftEndTimeTimestamp - shiftStartTimeTimestamp;
   const totalDuration = 24 * 60 * 60 * 1000;
   const shiftWidth = (shiftDuration / totalDuration) * 100;
 
+  // Calculate the current time position within the shift duration
+  const currentTimeMillis = currentDateTimezone.getTime();
+  const elapsedDuration = currentTimeMillis - shiftStartTimeTimestamp;
+
+  // Calculate the percentage progress within the shift duration
+  const shiftProgress = (elapsedDuration / shiftDuration) * 100;
+
+  // Center the shift position
+  const shiftPosition = 50 - shiftProgress / 3;
+
   return (
     <div className="relative -z-10 h-full w-full overflow-hidden rounded-xl bg-blue-300">
+      {/* {[...Array(24)].map((_, index) => (
+        <div
+          key={index}
+          className="absolute top-0 h-full w-0.5 bg-gray-200"
+          style={{
+            left: `${(index / 24) * 100}%`,
+          }}
+        />
+      ))} */}
       <div
-        className="absolute top-0 h-full bg-green-400"
+        className={clsx(
+          "absolute top-0 h-full",
+          isShiftActive ? "bg-green-400" : "bg-red-400",
+        )}
         style={{
           width: `${shiftWidth}%`,
-          right: `${shiftPosition}%`,
+          left: `${shiftPosition}%`,
         }}
       />
-      {shiftPosition + shiftWidth > 100 && (
+      {shiftPosition < 0 && (
         <div
-          className="absolute top-0 h-full bg-green-400"
+          className={clsx(
+            "absolute top-0 h-full",
+            isShiftActive ? "bg-green-400" : "bg-red-400",
+          )}
           style={{
-            width: `${shiftPosition + shiftWidth - 100}%`,
-            right: 0,
+            width: `${shiftWidth}%`,
+            left: `${shiftPosition + 100}%`,
           }}
         />
       )}
       <p className="absolute left-3 flex h-full items-center text-xs text-gray-700">
-        {startHour.toString().padStart(2, "0")}:
-        {startMinute.toString().padStart(2, "0")} -{" "}
-        {endHour.toString().padStart(2, "0")}:
-        {endMinute.toString().padStart(2, "0")}
+        {startHours.toString().padStart(2, "0")}:
+        {startMinutes.toString().padStart(2, "0")} -{" "}
+        {endHours.toString().padStart(2, "0")}:
+        {endMinutes.toString().padStart(2, "0")} {shiftPosition}
       </p>
     </div>
   );

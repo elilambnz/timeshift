@@ -108,7 +108,7 @@ export default function Dashboard({ session }: { session: Session | null }) {
                         minute: "2-digit",
                         timeZone: timezone,
                       })}{" "}
-                      <span className="ml-1 hidden sm:inline">
+                      <span className="hidden sm:inline">
                         - {readableTimezone(timezone)} (
                         {formatUTCOffset(getUTCOffsetForTimezone(timezone))})
                       </span>
