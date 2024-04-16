@@ -85,7 +85,7 @@ export default function Shift({
         {startHours.toString().padStart(2, "0")}:
         {startMinutes.toString().padStart(2, "0")} -{" "}
         {endHours.toString().padStart(2, "0")}:
-        {endMinutes.toString().padStart(2, "0")} {shiftPosition}
+        {endMinutes.toString().padStart(2, "0")}
       </p>
     </div>
   );
